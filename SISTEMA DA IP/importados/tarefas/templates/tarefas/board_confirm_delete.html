@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Excluir Quadro{% endblock %}
+{% block content %}
+  <h1>Excluir Quadro: {{ board.name }}</h1>
+  <p>Tem certeza que deseja excluir este quadro?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn">Sim, Excluir</button>
+    <a href="{% url 'tarefas:board_detail' board.pk %}" class="btn">Cancelar</a>
+  </form>
+{% endblock %}

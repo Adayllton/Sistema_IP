@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Confirmar Exclusão de Relatório{% endblock %}
+
+{% block content %}
+  <h2>Confirmar Exclusão</h2>
+  <p>Tem certeza que deseja excluir o relatório: <strong>{{ report }}</strong>?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirmar Exclusão</button>
+    <a href="{% url 'reports:report_list' %}">Cancelar</a>
+  </form>
+{% endblock %}

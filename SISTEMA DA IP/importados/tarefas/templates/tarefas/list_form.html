@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Criar Lista{% endblock %}
+{% block content %}
+  <h1>Criar Lista</h1>
+  {% if board_id %}
+    <p>Para o Quadro ID: {{ board_id }}</p>
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn">Salvar</button>
+  </form>
+  {% if board_id %}
+    <a href="{% url 'tarefas:board_detail' board_id %}">Voltar</a>
+  {% else %}
+    <a href="{% url 'tarefas:board_list' %}">Voltar</a>
+  {% endif %}
+{% endblock %}

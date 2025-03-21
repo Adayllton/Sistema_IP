@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Membros da Equipe{% endblock %}
+
+{% block content %}
+  <h2>Membros da Equipe</h2>
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      {{ form.nome.label_tag }}
+      {{ form.nome }}
+      {% if form.nome.errors %}
+        <div class="error">{{ form.nome.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="form-group">
+      {{ form.cargo.label_tag }}
+      {{ form.cargo }}
+      {% if form.cargo.errors %}
+        <div class="error">{{ form.cargo.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="form-group">
+      {{ form.departamento.label_tag }}
+      {{ form.departamento }}
+      {% if form.departamento.errors %}
+        <div class="error">{{ form.departamento.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="form-group">
+      {{ form.telefone.label_tag }}
+      {{ form.telefone }}
+      {% if form.telefone.errors %}
+        <div class="error">{{ form.telefone.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="form-group">
+      {{ form.email.label_tag }}
+      {{ form.email }}
+      {% if form.email.errors %}
+        <div class="error">{{ form.email.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="form-group">
+      {{ form.data_admissao.label_tag }}
+      {{ form.data_admissao }}
+      {% if form.data_admissao.errors %}
+        <div class="error">{{ form.data_admissao.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="form-group">
+      {{ form.observacoes.label_tag }}
+      {{ form.observacoes }}
+      {% if form.observacoes.errors %}
+        <div class="error">{{ form.observacoes.errors }}</div>
+      {% endif %}
+    </div>
+    <button type="submit">Adicionar Membro</button>
+  </form>
+  <hr>
+  {% if membros %}
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Cargo</th>
+          <th>Departamento</th>
+          <th>Telefone</th>
+          <th>Email</th>
+          <th>Data de Admissão</th>
+          <th>Observações</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody class="report-card">
+        {% for membro in membros %}
+          <tr>
+            <td data-label="Nome">{{ membro.nome }}</td>
+            <td data-label="Cargo">{{ membro.cargo }}</td>
+            <td data-label="Departamento">{{ membro.departamento }}</td>
+            <td data-label="Telefone">{{ membro.telefone }}</td>
+            <td data-label="Email">{{ membro.email }}</td>
+            <td data-label="Data de Admissão">{{ membro.data_admissao }}</td>
+            <td data-label="Observações">{{ membro.observacoes }}</td>
+            <td data-label="Ações">
+              <a href="{% url 'team:editar_membro' membro.id %}">Editar</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Nenhum membro cadastrado.</p>
+  {% endif %}
+{% endblock %}

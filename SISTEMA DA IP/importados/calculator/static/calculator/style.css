@@ -1,0 +1,339 @@
+/* styles.css - Estilos para o app Calculator */
+
+/* Importação de fontes */
+@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Roboto:wght@400;600&display=swap');
+
+/* Variáveis (apenas para referência; não afetam PDF) */
+:root {
+  --primary-color: #FF6D00;
+  --secondary-color: #9435F2;
+  --background-color: #FFFFFF;
+  --text-color: #222222;
+  --nav-bg: linear-gradient(90deg, #FF6D00, #9435F2);
+  --nav-text-color: #FFFFFF;
+  --button-bg: #FF6D00;
+  --button-text: #FFFFFF;
+  --border-color: #DDDDDD;
+  --container-width: 1200px;
+  --base-spacing: 1rem;
+  --transition-speed: 0.5s;
+}
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Corpo */
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.5;
+  padding-top: 70px;
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+
+/* Container */
+.container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: var(--base-spacing);
+}
+
+/* Inputs comuns */
+.calc-inputs {
+  margin-bottom: 1.5rem;
+}
+
+.calc-inputs label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.calc-inputs input[type="number"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--border-color);
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+}
+
+.tab {
+  padding: 0.75rem 1rem;
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  border-radius: 4px;
+  font-family: 'Luckiest Guy', cursive, sans-serif;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.tab.active {
+  background-color: #E65A00;
+}
+
+/* Tab contents */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Botões de cálculo */
+.buttons-group {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+button, a.btn {
+  display: inline-block;
+  padding: 0.75rem 1.25rem;
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  border-radius: 4px;
+  font-family: 'Luckiest Guy', cursive, sans-serif;
+  cursor: pointer;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+button:hover, a.btn:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+/* Último resultado */
+.last-result {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+/* Histórico */
+.history {
+  margin-top: 2rem;
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: #F9F9F9;
+}
+
+.history-title {
+  font-family: 'Luckiest Guy', cursive, sans-serif;
+  color: var(--secondary-color);
+  margin-bottom: 0.5rem;
+}
+
+/* Header e Navegação */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: var(--nav-bg);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.nav-brand a {
+  font-family: 'Luckiest Guy', cursive, sans-serif;
+  font-size: 1.5rem;
+  color: var(--nav-text-color);
+  text-decoration: none;
+}
+
+.nav-menu {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-menu li a {
+  color: var(--nav-text-color);
+  text-decoration: none;
+  font-family: 'Luckiest Guy', cursive, sans-serif;
+  font-size: 1.1rem;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.nav-menu li a:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+/* Menu hamburguer para mobile */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.nav-toggle .bar {
+  height: 3px;
+  width: 25px;
+  background-color: var(--nav-text-color);
+  margin: 4px 0;
+  transition: 0.3s;
+}
+
+/* Responsividade para menu */
+@media (max-width: 768px) {
+  .nav-menu {
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: var(--nav-bg);
+    display: none;
+  }
+  .nav-menu.active {
+    display: flex;
+  }
+  .nav-menu li {
+    text-align: center;
+    padding: 0.5rem 0;
+    border-top: 1px solid var(--border-color);
+  }
+  .nav-toggle {
+    display: flex;
+  }
+}
+
+/* Dropdown da Calculadora Básica no Header */
+.calc-dropdown {
+  position: relative;
+  display: inline-block;
+  margin-left: auto;
+}
+
+.calc-dropdown button {
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Luckiest Guy', cursive, sans-serif;
+}
+
+.calc-dropdown-content {
+  display: none;
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background-color: var(--background-color);
+  min-width: 300px;
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  z-index: 1200;
+}
+
+.calc-dropdown-content.active {
+  display: block;
+}
+
+/* Calculadora Básica Standalone (seção inferior) */
+.basic-calculator.standalone {
+  background-color: #FFFFFF;
+  border: 2px solid var(--button-bg);
+  border-radius: 8px;
+  padding: 1rem;
+  color: var(--text-color);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  margin-bottom: 2rem;
+}
+
+.basic-calculator.standalone h3 {
+  font-family: 'Luckiest Guy', cursive, sans-serif;
+  font-size: 1.2rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.basic-calculator.standalone .calc-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.basic-calculator.standalone input,
+.basic-calculator.standalone select {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #DDDDDD;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.basic-calculator.standalone button {
+  background-color: var(--button-bg);
+  color: #FFFFFF;
+  border: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.basic-calculator.standalone button:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.basic-calculator.standalone .calc-result {
+  margin-top: 0.5rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Animação de transição (slide + fade) */
+@keyframes slideFade {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.transition-slide {
+  animation: slideFade var(--transition-speed) ease forwards;
+}
+
+.result, .last-result {
+  background: linear-gradient(135deg, #FF6D00, #9435F2);
+  color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  margin-top: 1rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.last-result {
+  background: #FFF5E6;
+  color: #9435F2;
+  border: 1px solid #FF6D00;
+  margin-top: 5px;
+}
+

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}{{ board.name }}{% endblock %}
+{% block content %}
+  <h1>{{ board.name }}</h1>
+  <p>{{ board.description }}</p>
+  
+  <!-- Link para criar nova lista -->
+  <a href="{% url 'tarefas:list_create' %}?board={{ board.pk }}" class="btn">Criar Nova Lista</a>
+  
+  <div class="board-container">
+    {% for lista in board.lists.all %}
+      <div class="list-column" id="list-{{ lista.pk }}">
+        <h3>{{ lista.name }}</h3>
+        <ul class="task-list" data-list-id="{{ lista.pk }}">
+          {% for task in lista.tasks.all %}
+            <li class="task-item" data-id="{{ task.pk }}">
+              <a href="{% url 'tarefas:task_detail' task.pk %}">{{ task.title }} <p>{{ task.deadline_status }}</em></p></a>
+            </li>
+          {% empty %}
+            <li class="empty-task">Nenhuma tarefa</li>
+          {% endfor %}
+        </ul>
+        <!-- Link para adicionar tarefa à lista -->
+        <a href="{% url 'tarefas:task_create' %}?list={{ lista.pk }}" class="btn small">Nova Tarefa</a>
+      </div>
+    {% endfor %}
+  </div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+  <script>
+    // Inicializa o Sortable em cada lista
+    document.querySelectorAll('.task-list').forEach(function(listEl) {
+      Sortable.create(listEl, {
+        group: 'shared-tasks', // Permite mover entre listas
+        animation: 150,
+        onEnd: function(evt) {
+          let order = [];
+          evt.to.querySelectorAll('.task-item').forEach(item => {
+            order.push(item.getAttribute('data-id'));
+          });
+          // Envia a nova ordem para o backend via AJAX
+          fetch("{% url 'tarefas:update_task_order' %}", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify({
+              list_id: evt.to.getAttribute('data-list-id'),
+              order: order
+            })
+          });
+        }
+      });
+    });
+  </script>
+{% endblock %}

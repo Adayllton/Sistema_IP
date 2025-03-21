@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Quadros{% endblock %}
+{% block content %}
+  <div class="board-list-container">
+    <h1 class="board-list-title">Quadros</h1>
+    
+    <!-- Formulário de busca -->
+    <form method="get" action="{% url 'tarefas:board_list' %}" class="board-search-form">
+      <input type="text" name="q" placeholder="Buscar quadros..." class="search-input">
+      <button type="submit" class="btn search-btn">Buscar</button>
+    </form>
+    
+    <!-- Link para criar novo quadro -->
+    <a href="{% url 'tarefas:board_create' %}" class="btn create-board-btn">Criar Novo Quadro</a>
+    
+    <!-- Lista de quadros em formato de cards -->
+    <div class="boards-grid">
+      {% for board in boards %}
+        <div class="board-card">
+          <h2 class="board-card-title">
+            <a href="{% url 'tarefas:board_detail' board.pk %}">{{ board.name }}</a>
+          </h2>
+          <p class="board-card-description">{{ board.description }}</p>
+          <div class="board-card-actions">
+            <a href="{% url 'tarefas:board_update' board.pk %}" class="btn edit-btn">Editar</a>
+            <a href="{% url 'tarefas:board_delete' board.pk %}" class="btn delete-btn">Excluir</a>
+          </div>
+        </div>
+      {% empty %}
+        <p>Nenhum quadro cadastrado.</p>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

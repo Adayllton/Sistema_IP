@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Detalhes do Relatório</title>
+  <link rel="stylesheet" href="{% static 'css/pdf_style.css' %}">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <div class="container">
+    <h2>Detalhes do Relatório</h2>
+    <div class="report-detail">
+      <p><strong>Tipo:</strong> {{ report.get_tipo_display }}</p>
+      <p><strong>Data:</strong> {{ report.data }}</p>
+      <p><strong>Feedback Geral:</strong> {{ report.feedback_geral }}</p>
+      {% if report.tipo == "semanal" %}
+        <p><strong>Produtos Mais Procurados:</strong> {{ report.produtos_mais_procurados }}</p>
+      {% else %}
+        <p><strong>Sugestão de Grade:</strong> {{ report.sugestao_grade_produtos }}</p>
+        <p><strong>Ação para Melhorar:</strong> {{ report.acao_melhoria_mes }}</p>
+        <p><strong>Colaborador Destaque:</strong> {{ report.colaborador_destaque }}</p>
+        <p><strong>Feedback de Organização:</strong> {{ report.feedback_organizacao }}</p>
+        <p><strong>Logística:</strong> {{ report.logistica }}</p>
+      {% endif %}
+      <p><strong>Ação para Corrigir Erros da Semana:</strong> {{ report.acao_correcao_semana }}</p>
+      <p><strong>Atendimento Presencial:</strong> {{ report.atendimento_presencial }}</p>
+      <p><strong>Atendimento Online:</strong> {{ report.atendimento_online }}</p>
+    </div>
+  </div>
+</body>
+</html>

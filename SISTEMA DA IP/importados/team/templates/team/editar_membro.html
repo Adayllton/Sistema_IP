@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Editar Membro - {{ membro.nome }}{% endblock %}
+
+{% block content %}
+  <h2>Editar Membro: {{ membro.nome }}</h2>
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="form-group">
+        {{ field.label_tag }}
+        {{ field }}
+        {% if field.errors %}
+          <div class="error">{{ field.errors }}</div>
+        {% endif %}
+      </div>
+    {% endfor %}
+    <button type="submit">Salvar Alterações</button>
+    <a href="{% url 'team:membros' %}">Cancelar</a>
+  </form>
+{% endblock %}

@@ -1,0 +1,89 @@
+/* pdf_style.css - Cores e estilos explícitos para PDF */
+
+/* Importa fontes do Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Roboto:wght@400;600&display=swap');
+
+/* Corpo da página */
+body {
+  font-family: 'Luckiest Guy', cursive, sans-serif;
+  background-color: #FFFFFF;
+  color: #222222;
+  line-height: 1.5;
+  padding-top: 70px;
+  margin: 0;
+}
+
+/* Container principal */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Títulos – usando a fonte principal e cor fixa */
+h1, h2, h3 {
+  font-family: 'Luckiest Guy', cursive, sans-serif;
+  color: #9435F2;
+  margin-bottom: 0.5rem;
+}
+
+/* Texto informativo – usando a fonte secundária */
+p, label, small {
+  font-family: 'Roboto', sans-serif;
+  margin-bottom: 0.5rem;
+}
+
+/* Estilização de formulários: inputs, textareas e selects */
+input, textarea, select {
+  border: 2px solid #DDDDDD;
+  border-radius: 4px;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-family: 'Roboto', sans-serif;
+  color: #222222;
+}
+
+/* Botões e links com a classe .btn */
+button, a.btn {
+  background-color: #FF6D00;
+  color: #FFFFFF;
+  padding: 0.75rem 1.25rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-family: 'Luckiest Guy', cursive, sans-serif;
+  font-size: 1rem;
+  display: inline-block;
+  text-align: center;
+}
+
+/* Estilização para os "cards" de relatórios */
+.report-card {
+  background-color: #F0F0F0;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.report-card h3 {
+  color: #9435F2;
+  margin-bottom: 0.5rem;
+}
+
+/* Estilização específica para a área de detalhes do relatório */
+.report-detail {
+  border: 1px solid #DDDDDD;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #F0F0F0;
+  margin-bottom: 1rem;
+}
+
+.report-detail p {
+  margin-bottom: 0.5rem;
+}
+
+.report-detail p strong {
+  display: inline-block;
+  width: 200px;
+}

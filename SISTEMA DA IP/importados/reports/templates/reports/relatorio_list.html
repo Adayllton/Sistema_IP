@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Lista de Relatórios{% endblock %}
+
+{% block content %}
+  <h2>Relatórios</h2>
+  <div class="tabs" style="margin-bottom: 1rem;">
+    <button><a href="{% url 'reports:report_list' %}?tipo=semanal">Semanal</a></button>
+    <button><a href="{% url 'reports:report_list' %}?tipo=mensal">Mensal</a></button>
+  </div>
+
+  {% if reports %}
+    <div class="report-cards">
+      {% for report in reports %}
+        <div class="report-card">
+          <h3>{{ report.get_tipo_display }} - {{ report.data }}</h3>
+          <p><strong>Feedback Geral:</strong> {{ report.feedback_geral|truncatechars:100 }}</p>
+          {% if report.tipo == 'semanal' %}
+            <p><strong>Produtos Mais Procurados:</strong> {{ report.produtos_mais_procurados }}</p>
+          {% else %}
+            <p><strong>Sugestão de Grade:</strong> {{ report.sugestao_grade_produtos }}</p>
+          {% endif %}
+          <!-- Ações: Visualizar, Editar, Excluir, Exportar PDF -->
+          <div class="box-flex">
+          <a href="{% url 'reports:report_view' report.id %}" class="btn btn-view">Visualizar</a>
+          <a href="{% url 'reports:report_update' report.id %}" class="btn btn-edit">Editar</a>
+          <a href="{% url 'reports:report_delete' report.id %}" class="btn btn-delete" onclick="return confirm('Tem certeza que deseja excluir este relatório?');">Excluir</a>
+          <a href="{% url 'reports:report_export_pdf' report.id %}" class="btn btn-export">Exportar PDF</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>Nenhum relatório cadastrado.</p>
+  {% endif %}
+{% endblock %}

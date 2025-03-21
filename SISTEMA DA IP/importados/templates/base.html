@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Sistema de Relatórios{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <header>
+    <nav class="nav">
+      <div class="nav-brand">
+        <a href="{% url 'home' %}"><img src="{% static 'images/logo ipp.png' %}" alt="Logo" class="logo"></a>
+      </div>
+      <!-- Botão de menu hamburguer -->
+      <div class="nav-toggle" id="navToggle">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="{% url 'tarefas:board_list' %}">Tarefas</a></li>
+        <li><a href="{% url 'reports:report_list' %}">Relatórios</a></li>
+        <li><a href="{% url 'reports:report_create_weekly' %}">Novo Relatório Semanal</a></li>
+        <li><a href="{% url 'reports:report_create_monthly' %}">Novo Relatório Mensal</a></li>
+        <li><a href="{% url 'team:membros' %}">Membros</a></li>
+        <li><a href="{% url 'calculator:index' %}">Calculadora</a></li>
+        {% if user.is_authenticated %}
+          <li><a href="{% url 'users:logout' %}">Logout</a></li>
+        {% else %}
+          <li><a href="{% url 'users:login' %}">Login</a></li>
+        {% endif %}
+        <!-- Toggle para modo noturno -->
+        <li>
+          <div class="toggle-switch">
+            <input type="checkbox" id="toggle-darkmode">
+            <label for="toggle-darkmode"></label>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  
+  <!-- Garantir que o conteúdo não fique oculto pelo header fixo -->
+  <div class="container">
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </div>
+
+  <script>
+    // Persistência do modo noturno usando localStorage
+    document.addEventListener("DOMContentLoaded", function(){
+      if(localStorage.getItem("darkMode") === "enabled"){
+        document.body.classList.add("dark-mode");
+        const toggle = document.getElementById('toggle-darkmode');
+        if(toggle) toggle.checked = true;
+      }
+    });
+    
+    const toggleInput = document.getElementById('toggle-darkmode');
+    if(toggleInput){
+      toggleInput.addEventListener('change', () => {
+        document.body.classList.add('transition-slide');
+        document.body.classList.toggle('dark-mode');
+        if(document.body.classList.contains('dark-mode')){
+          localStorage.setItem("darkMode", "enabled");
+        } else {
+          localStorage.setItem("darkMode", "disabled");
+        }
+        setTimeout(() => {
+          document.body.classList.remove('transition-slide');
+        }, 500);
+      });
+    }
+
+    // Menu hamburguer
+    const navToggle = document.getElementById('navToggle');
+    const navMenu = document.getElementById('navMenu');
+    navToggle.addEventListener('click', () => {
+      navMenu.classList.toggle('active');
+    });
+  </script>
+  <script src="{% static 'js/submit_preventer.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}{{ task.title|default:"Nova Tarefa" }}{% endblock %}
+{% block content %}
+  <h1>{{ task.title|default:"Criar Tarefa" }}</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn">Salvar</button>
+  </form>
+  {% if task %}
+    <a href="{% url 'tarefas:board_detail' task.list.board.pk %}">Voltar</a>
+  {% else %}
+    {% if board_id %}
+      <a href="{% url 'tarefas:board_detail' board_id %}">Voltar</a>
+    {% else %}
+      <a href="{% url 'tarefas:board_list' %}">Voltar</a>
+    {% endif %}
+  {% endif %}
+{% endblock %}

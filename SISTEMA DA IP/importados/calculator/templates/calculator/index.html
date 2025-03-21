@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora - Importados do Povo</title>
+  <link rel="icon" href="{% static 'calculator/Elementos.png' %}" type="image/png">
+  <link rel="stylesheet" href="{% static 'calculator/style.css' %}">
+</head>
+<body>
+  <header>
+     <!-- Abas para cada modalidade -->
+     <div class="tabs">
+      <div class="tab active" onclick="switchTab('presencial')">Presencial</div>
+      <div class="tab" onclick="switchTab('link')">Via Link</div>
+      <div class="tab" onclick="switchTab('credishop')">Credishop</div>
+    </div>
+    <nav class="nav">
+      <div class="nav-brand">
+        <a href="{% url 'home' %}">Importados do Povo</a>
+      </div>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="#parcelas">Parcelas</a></li>
+        <li><a href="#history">Histórico</a></li>
+      </ul>
+      <div class="nav-toggle" id="navToggle">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container">
+    <!-- Inputs comuns para cálculo de parcelas -->
+    <div class="calc-inputs">
+      <label for="value">Valor total (R$):</label>
+      <input type="number" id="value" placeholder="Insira o valor" step="0.01">
+      <label for="down-payment">Entrada (R$):</label>
+      <input type="number" id="down-payment" placeholder="Insira o valor" step="0.01" value="0">
+      <label for="installments">Quantidade de Parcelas:</label>
+      <input type="number" id="installments" placeholder="Insira a quantidade" maxlength="2">
+    </div>
+
+    <!-- Conteúdo da Aba: Presencial -->
+    <div id="presencial" class="tab-content active">
+      <div class="buttons-group">
+        <button onclick="calculateInstallmentSingle()">Calcular Presencial 1</button>
+        <button onclick="calculateAllInstallment()">Calcular todas Presencial</button>
+      </div>
+      <div class="result" id="result-presencial"></div>
+      <button onclick="copyToClipboard('result-presencial')">Copiar Resultado</button>
+      <div class="last-result">
+        Último parcelamento (Presencial): <span id="last-presencial"></span>
+      </div>
+    </div>
+
+    <!-- Conteúdo da Aba: Via Link -->
+    <div id="link" class="tab-content">
+      <div class="buttons-group">
+        <button onclick="calculateLinkInstallmentSingle()">Calcular Via Link 1</button>
+        <button onclick="calculateAllLinkInstallment()">Calcular todas Via Link</button>
+      </div>
+      <div class="result" id="result-link"></div>
+      <button onclick="copyToClipboard('result-link')">Copiar Resultado</button>
+      <div class="last-result">
+        Último parcelamento (Via Link): <span id="last-link"></span>
+      </div>
+      <div class="result" id="result-link"></div>
+    </div>
+
+    <!-- Conteúdo da Aba: Credishop -->
+    <div id="credishop" class="tab-content">
+      <div class="buttons-group">
+        <button onclick="calculateInstallmentCrediSingle()">Calcular Credishop 1</button>
+        <button onclick="calculateAllCrediInstallment()">Calcular todas Credishop</button>
+      </div>
+      <div class="result" id="result-credi"></div>
+      <button onclick="copyToClipboard('result-credi')">Copiar Resultado</button>
+      <div class="last-result">
+        Último parcelamento (Credishop): <span id="last-credi"></span>
+      </div>
+      
+    </div>
+
+    <!-- Seção: Histórico Geral -->
+    <div class="history" id="history">
+      <div class="history-title">Histórico de Cálculos</div>
+      <div id="history-list"></div>
+    </div>
+  </div>
+
+  <script src="{% static 'calculator/script.js' %}"></script>
+</body>
+</html>

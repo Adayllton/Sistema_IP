@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}{{ task.title }}{% endblock %}
+{% block content %}
+  <h1>{{ task.title }}</h1>
+  <p>{{ task.description }}</p>
+  <p><strong>Prazo:</strong> {{ task.due_date }} (<em>{{ task.deadline_status }}</em>)</p>
+  <p><strong>Status:</strong> {{ task.get_status_display }}</p>
+  <p><strong>Responsáveis:</strong>
+    {% for user in task.assigned_users.all %}
+      {{ user.username }}{% if not forloop.last %}, {% endif %}
+    {% empty %}
+      Nenhum
+    {% endfor %}
+  </p>
+  <a href="{% url 'tarefas:task_update' task.pk %}" class="btn">Editar Tarefa</a>
+  <a href="{% url 'tarefas:task_delete' task.pk %}" class="btn">Excluir Tarefa</a>
+  {% if task.status != "concluida" %}
+    <a href="{% url 'tarefas:mark_task_completed' task.pk %}" class="btn">Marcar como Concluída</a>
+  {% endif %}
+  <a href="{% url 'tarefas:board_detail' task.lista.board.pk %}" class="btn">Voltar ao Quadro</a>
+
+  <h2>Anexos</h2>
+  <ul>
+    {% for attachment in task.attachments.all %}
+      <li>
+        <a href="{{ attachment.file.url }}" target="_blank">Anexo {{ forloop.counter }}</a>
+        (Enviado em: {{ attachment.uploaded_at|date:"d/m/Y H:i" }})
+      </li>
+    {% empty %}
+      <li>Nenhum anexo adicionado.</li>
+    {% endfor %}
+  </ul>
+  <a href="{% url 'tarefas:add_attachment' task.pk %}" class="btn">Adicionar Anexo</a>
+
+  <h2>Comentários</h2>
+  <!-- Comentários e formulário para adicionar comentários -->
+  <ul>
+    {% for comment in task.comments.all %}
+      <li><strong>{{ comment.user.username }}</strong>: {{ comment.text }} <small>({{ comment.created_at }})</small></li>
+    {% endfor %}
+  </ul>
+  <h3>Adicionar Comentário</h3>
+  <form method="post" action="{% url 'tarefas:add_comment' task.pk %}">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <button type="submit" class="btn">Enviar</button>
+  </form>
+
+  <h2>Histórico de Ações</h2>
+  <ul>
+    {% for log in task.history.all %}
+      <li>{{ log.action }} por {{ log.performed_by }} em {{ log.timestamp }} - {{ log.details }}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
