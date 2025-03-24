@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (
     BoardListView, BoardDetailView, BoardCreateView, BoardUpdateView, BoardDeleteView,
-    TaskDetailView, TaskCreateView, TaskUpdateView, TaskDeleteView, ListCreateView, add_attachment, mark_task_completed, update_task_order, add_comment
+    TaskDetailView, TaskCreateView, TaskUpdateView, TaskDeleteView, ListCreateView, filter_tasks, add_attachment, mark_task_completed, update_task_order, add_comment
 )
 app_name = 'tarefas'
 
@@ -21,6 +21,7 @@ urlpatterns = [
     path('task/update_order/', update_task_order, name='update_task_order'),
     path('task/mark_completed/<int:pk>/', mark_task_completed, name='mark_task_completed'),
     path('task/<int:task_id>/attachment/add/', add_attachment, name='add_attachment'),
+    path('task/filter/', filter_tasks, name='filter_tasks'),
 
 
     # Lists

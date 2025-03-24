@@ -572,3 +572,89 @@ td {
   height: 40px;
   /* ou width, margin, etc. */
 }
+
+
+/* Estilos para telas de autenticação (login e cadastro) */
+
+.auth-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  padding: 20px;
+  background-color: #f2f2f2; /* Cor de fundo suave para contraste */
+}
+
+.auth-box {
+  width: 360px;
+  padding: 40px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.auth-box h2 {
+  margin-bottom: 20px;
+  font-size: 2rem;
+  color: #9435F2; /* Cor principal para títulos */
+}
+
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.btn-login {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #FF6D00;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #E65A00;
+}
+
+.error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+.auth-box p {
+  margin-top: 20px;
+  font-size: 0.9rem;
+}
+
+.auth-box a {
+  color: #FF6D00;
+  text-decoration: none;
+}
+
+.auth-box a:hover {
+  text-decoration: underline;
+}

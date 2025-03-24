@@ -1,35 +1,24 @@
 {% extends "base.html" %}
-{% block title %}Cadastro{% endblock %}
-
-{% block extra_head %}
-{% endblock %}
-
+{% load static %}
+{% block title %}Cadastro - Sistema Importados{% endblock %}
 {% block content %}
-<div class="form-container" id="formContainer">
-  <h2>Cadastro</h2>
-  <form method="post">
-    {% csrf_token %}
-    {% for field in form %}
-      <div class="form-group">
-        {{ field.label_tag }}
-        {{ field }}
-        {% if field.errors %}
-          <div class="error">{{ field.errors }}</div>
-        {% endif %}
-      </div>
-    {% endfor %}
-    <button type="submit" class="btn">Cadastrar</button>
-  </form>
-  <p>Já tem uma conta? <a href="{% url 'users:login' %}" id="toLogin">Faça login aqui</a>.</p>
+<div class="auth-container">
+  <div class="auth-box">
+    <h2>Cadastro</h2>
+    <form method="post">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="form-group">
+          {{ field.label_tag }}
+          {{ field }}
+          {% if field.errors %}
+            <div class="error">{{ field.errors }}</div>
+          {% endif %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="btn-login">Cadastrar</button>
+    </form>
+    <p>Já possui uma conta? <a href="{% url 'users:login' %}">Faça Login</a></p>
+  </div>
 </div>
-<script>
-  document.getElementById("toLogin").addEventListener("click", function(e) {
-    e.preventDefault();
-    const container = document.getElementById("formContainer");
-    container.classList.add("fade-out");
-    setTimeout(function(){
-       window.location.href = e.target.href;
-    }, 500);
-  });
-</script>
 {% endblock %}

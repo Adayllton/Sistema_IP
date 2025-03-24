@@ -1,0 +1,21 @@
+{% if tasks %}
+  <ul class="task-list" data-list-id="{{ tasks.0.lista.pk }}">
+{% else %}
+  <ul class="task-list" data-list-id="">
+{% endif %}
+  {% for task in tasks %}
+    <li class="task-item" data-id="{{ task.pk }}">
+      <div class="task-info">
+        <a href="{% url 'tarefas:task_detail' task.pk %}" style="text-decoration: none; color: #000;">
+          {{ task.title }}
+        </a>
+        <p class="deadline-status">{{ task.deadline_status }}</p>
+        <p class="task-status">Status: {{ task.get_status_display }}</p>
+      </div>
+    </li>
+  {% empty %}
+    <li class="empty-task">Nenhuma tarefa</li>
+  {% endfor %}
+</ul>
+
+  

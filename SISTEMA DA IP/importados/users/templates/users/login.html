@@ -1,34 +1,23 @@
 {% extends "base.html" %}
-{% block title %}Login{% endblock %}
-
-{% block extra_head %}
-{% endblock %}
-
+{% load static %}
+{% block title %}Login - Sistema Importados{% endblock %}
 {% block content %}
-<div class="form-container" id="formContainer">
-  <h2>Login</h2>
-  <form method="post">
-    {% csrf_token %}
-    <div class="form-group">
-      {{ form.username.label_tag }}
-      {{ form.username }}
-    </div>
-    <div class="form-group">
-      {{ form.password.label_tag }}
-      {{ form.password }}
-    </div>
-    <button type="submit" class="btn">Entrar</button>
-  </form>
-  <p>Não tem uma conta? <a href="{% url 'users:cadastro' %}" id="toCadastro">Cadastre-se aqui</a>.</p>
+<div class="auth-container">
+  <div class="auth-box">
+    <h2>Login</h2>
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        {{ form.username.label_tag }}
+        {{ form.username }}
+      </div>
+      <div class="form-group">
+        {{ form.password.label_tag }}
+        {{ form.password }}
+      </div>
+      <button type="submit" class="btn-login">Entrar</button>
+    </form>
+    <p>Não possui uma conta? <a href="{% url 'users:cadastro' %}">Cadastre-se</a></p>
+  </div>
 </div>
-<script>
-  document.getElementById("toCadastro").addEventListener("click", function(e) {
-    e.preventDefault();
-    const container = document.getElementById("formContainer");
-    container.classList.add("fade-out");
-    setTimeout(function(){
-       window.location.href = e.target.href;
-    }, 500);
-  });
-</script>
 {% endblock %}

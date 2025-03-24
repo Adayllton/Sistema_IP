@@ -16,6 +16,63 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Task, Attachment
 from .forms import AttachmentForm
+from django.shortcuts import get_object_or_404
+from django.views.generic import DetailView
+from .models import Board
+from django.template.loader import render_to_string
+from .models import List
+
+def filter_tasks(request):
+    list_id = request.GET.get('list_id')
+    search = request.GET.get('search', '')
+    status_filter = request.GET.get('status_filter', '')
+    
+    tasks_html = ''
+    if list_id:
+        try:
+            lista = List.objects.get(pk=list_id)
+            tasks = lista.tasks.all()
+            if search:
+                tasks = tasks.filter(title__icontains=search)
+            if status_filter:
+                tasks = tasks.filter(status=status_filter)
+            tasks_html = render_to_string('tarefas/partials/task_list.html', {'tasks': tasks})
+        except List.DoesNotExist:
+            tasks_html = ''
+    return JsonResponse({'tasks_html': tasks_html})
+
+
+class BoardDetailView(DetailView):
+    model = Board
+    template_name = 'tarefas/board_detail.html'
+    context_object_name = 'board'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        board = self.object  # O quadro atual
+        # Pega parâmetros da query string
+        search = self.request.GET.get('search', '').strip()
+        list_id = self.request.GET.get('list_id', '')
+
+        # Monta uma estrutura para armazenar (lista, tarefas)
+        lists_data = []
+        for lista in board.lists.all():
+            tasks = lista.tasks.all().order_by('order')
+
+            # Se a lista atual for a selecionada e houver texto de busca, filtra
+            if str(lista.pk) == list_id and search:
+                tasks = tasks.filter(title__icontains=search)
+
+            lists_data.append({
+                'lista': lista,
+                'tasks': tasks,
+            })
+
+        # Disponibiliza no contexto
+        context['lists_data'] = lists_data
+        context['search'] = search
+        context['current_list_id'] = list_id
+        return context
 
 def add_attachment(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
@@ -110,11 +167,6 @@ class BoardListView(ListView):
     model = Board
     template_name = 'tarefas/board_list.html'
     context_object_name = 'boards'
-
-class BoardDetailView(DetailView):
-    model = Board
-    template_name = 'tarefas/board_detail.html'
-    context_object_name = 'board'
 
 class BoardCreateView(CreateView):
     model = Board

@@ -11,34 +11,55 @@
     {% for lista in board.lists.all %}
       <div class="list-column" id="list-{{ lista.pk }}">
         <h3>{{ lista.name }}</h3>
-        <ul class="task-list" data-list-id="{{ lista.pk }}">
-          {% for task in lista.tasks.all %}
-            <li class="task-item" data-id="{{ task.pk }}">
-              <a href="{% url 'tarefas:task_detail' task.pk %}">{{ task.title }} <p>{{ task.deadline_status }}</em></p></a>
-            </li>
-          {% empty %}
-            <li class="empty-task">Nenhuma tarefa</li>
-          {% endfor %}
-        </ul>
-        <!-- Link para adicionar tarefa à lista -->
+        <!-- Formulário de busca para a lista atual -->
+        <form method="get" class="list-search-form" onsubmit="return false;">
+          <input type="hidden" name="list_id" value="{{ lista.pk }}">
+          <input type="text" name="search" placeholder="Buscar tarefas..."
+                 class="search-input">
+          <select name="status_filter" class="status-select">
+            <option value="">Todos</option>
+            <option value="pendente">Pendente</option>
+            <option value="andamento">Em Andamento</option>
+            <option value="concluida">Concluída</option>
+          </select>
+        </form>
+        
+        <div class="tasks-container">
+          <!-- Carregaremos o conteúdo via AJAX. Inicialmente, exibe a lista completa: -->
+          <ul class="task-list" data-list-id="{{ lista.pk }}">
+            {% for task in lista.tasks.all %}
+              <li class="task-item" data-id="{{ task.pk }}">
+                <a href="{% url 'tarefas:task_detail' task.pk %}" style="text-decoration: none; color: #000;">
+                  {{ task.title }}
+                </a>
+                <p class="deadline-status">{{ task.deadline_status }}</p>
+                <p class="task-status">Status: {{ task.get_status_display }}</p>
+              </li>
+            {% empty %}
+              <li class="empty-task">Nenhuma tarefa</li>
+            {% endfor %}
+          </ul>
+        </div>
+        
+        <!-- Link para criar tarefa na lista -->
         <a href="{% url 'tarefas:task_create' %}?list={{ lista.pk }}" class="btn small">Nova Tarefa</a>
       </div>
     {% endfor %}
   </div>
   
+  <!-- Scripts: SortableJS e filtro live -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
   <script>
-    // Inicializa o Sortable em cada lista
+    // Inicializa o Sortable em cada lista para arrastar e soltar
     document.querySelectorAll('.task-list').forEach(function(listEl) {
       Sortable.create(listEl, {
-        group: 'shared-tasks', // Permite mover entre listas
+        group: 'shared-tasks',
         animation: 150,
         onEnd: function(evt) {
           let order = [];
           evt.to.querySelectorAll('.task-item').forEach(item => {
             order.push(item.getAttribute('data-id'));
           });
-          // Envia a nova ordem para o backend via AJAX
           fetch("{% url 'tarefas:update_task_order' %}", {
             method: "POST",
             headers: {
@@ -52,6 +73,66 @@
           });
         }
       });
+    });
+    
+    // Função para filtrar tarefas via AJAX
+    function filterTasks(listId, search, status_filter) {
+      fetch("{% url 'tarefas:filter_tasks' %}?list_id=" + listId + "&search=" + encodeURIComponent(search) + "&status_filter=" + encodeURIComponent(status_filter))
+      .then(response => response.json())
+      .then(data => {
+        // Atualiza o conteúdo da lista com o HTML retornado
+        let listColumn = document.getElementById('list-' + listId);
+        if (listColumn) {
+          // Procura o container de tasks dentro da coluna
+          let tasksContainer = listColumn.querySelector('.tasks-container');
+          if (tasksContainer) {
+            tasksContainer.innerHTML = data.tasks_html;
+            // Opcional: re-inicialize o Sortable na nova lista
+            Sortable.create(tasksContainer.querySelector('.task-list'), {
+              group: 'shared-tasks',
+              animation: 150,
+              onEnd: function(evt) {
+                let order = [];
+                evt.to.querySelectorAll('.task-item').forEach(item => {
+                  order.push(item.getAttribute('data-id'));
+                });
+                fetch("{% url 'tarefas:update_task_order' %}", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                  },
+                  body: JSON.stringify({
+                    list_id: evt.to.getAttribute('data-list-id'),
+                    order: order
+                  })
+                });
+              }
+            });
+          }
+        }
+      });
+    }
+    
+    // Adiciona eventos de "live search" e filtro para cada formulário de busca
+    document.querySelectorAll('.list-search-form').forEach(function(form) {
+      const searchInput = form.querySelector('input[name="search"]');
+      const statusSelect = form.querySelector('select[name="status_filter"]');
+      const listId = form.querySelector('input[name="list_id"]').value;
+      
+      // Debounce para evitar muitas requisições
+      let timeout = null;
+      function handleFilter() {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          const search = searchInput.value;
+          const status_filter = statusSelect.value;
+          filterTasks(listId, search, status_filter);
+        }, 300);
+      }
+      
+      searchInput.addEventListener('keyup', handleFilter);
+      statusSelect.addEventListener('change', handleFilter);
     });
   </script>
 {% endblock %}

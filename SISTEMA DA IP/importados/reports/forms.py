@@ -1,7 +1,3 @@
-# reports/forms.py
-from django import forms
-from .models import Report
-
 from django import forms
 from .models import Report
 
@@ -12,7 +8,7 @@ class ReportWeeklyForm(forms.ModelForm):
             'data',
             'feedback_geral',
             'acao_correcao_semana',
-            'produtos_mais_procurados',  # já existente para o semanal
+            'produtos_mais_procurados',
             'atendimento_presencial',
             'atendimento_online',
         ]
@@ -24,7 +20,14 @@ class ReportWeeklyForm(forms.ModelForm):
             'atendimento_presencial': forms.Textarea(attrs={'rows': 3}),
             'atendimento_online': forms.Textarea(attrs={'rows': 3}),
         }
-
+        labels = {
+            'data': 'Data',
+            'feedback_geral': 'Feedback Geral',
+            'acao_correcao_semana': 'Ação de Correção Semanal',
+            'produtos_mais_procurados': 'Produtos Mais Procurados',
+            'atendimento_presencial': 'Atendimento Presencial',
+            'atendimento_online': 'Atendimento Online',
+        }
 
 class ReportMonthlyForm(forms.ModelForm):
     class Meta:
@@ -51,4 +54,16 @@ class ReportMonthlyForm(forms.ModelForm):
             'logistica': forms.Textarea(attrs={'rows': 3}),
             'atendimento_presencial': forms.Textarea(attrs={'rows': 3}),
             'atendimento_online': forms.Textarea(attrs={'rows': 3}),
+        }
+        labels = {
+            'data': 'Data',
+            'feedback_geral': 'Feedback Geral',
+            'acao_correcao_semana': 'Ação de Correção Semanal',
+            'sugestao_grade_produtos': 'Sugestão de Grade de Produtos',
+            'acao_melhoria_mes': 'Ação de Melhoria do Mês',
+            'colaborador_destaque': 'Colaborador Destaque',
+            'feedback_organizacao': 'Feedback da Organização',
+            'logistica': 'Logística',
+            'atendimento_presencial': 'Atendimento Presencial',
+            'atendimento_online': 'Atendimento Online',
         }
